@@ -3,7 +3,7 @@ import App from "./App"
 import * as graphql from "./generated/graphql"
 import { mount, updates } from "./testing"
 
-// mocks
+/* Mocks */
 
 // Annotate mocks with generated types to make sure that client code keeps up to
 // date the with the server's API
@@ -57,6 +57,18 @@ const returnOfTheJediHero = {
     data: r2d2
   }
 }
+
+const setFavorite = {
+  request: {
+    query: graphql.SetFavoriteDocument,
+    variables: { episode: graphql.Episode.Newhope }
+  },
+  result: {
+    data: { favorite: graphql.Episode.Newhope }
+  }
+}
+
+/* Tests */
 
 it("shows a loading indicator while the query is in progress", () => {
   const app = mount(<App />)
@@ -116,4 +128,17 @@ it("shows the hero of Return of the Jedi", async () => {
       <dd></dd>
     </dl>
   )
+})
+
+it("dispatches a mutation to set favorite episode", async () => {
+  const app = mount(<App />, { mocks: [newhopeHero, setFavorite] })
+  const button = app.find(".set-favorite")
+  expect(button).toHaveProp("disabled", false)
+
+  button.simulate("click")
+
+  await updates(app)
+  // We would get an error at about this point if we had not provided the
+  // `setFavorite` mock response.
+  expect(button).toHaveProp("disabled", false)
 })

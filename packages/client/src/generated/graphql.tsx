@@ -107,6 +107,16 @@ export type GetHeroQuery = (
   ) }
 );
 
+export type SetFavoriteMutationVariables = {
+  episode: Episode
+};
+
+
+export type SetFavoriteMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'favorite'>
+);
+
 export const GetHeroDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getHero"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Episode"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hero"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"episode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episode"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"friends"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"secretBackstory"},"arguments":[],"directives":[]}]}}]}}]};
 
     export function useGetHeroQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetHeroQuery, GetHeroQueryVariables>) {
@@ -118,3 +128,12 @@ export const GetHeroDocument: DocumentNode = {"kind":"Document","definitions":[{
       
 export type GetHeroQueryHookResult = ReturnType<typeof useGetHeroQuery>;
 export type GetHeroQueryResult = ApolloReactCommon.QueryResult<GetHeroQuery, GetHeroQueryVariables>;
+export const SetFavoriteDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"setFavorite"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Episode"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"favorite"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"episode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episode"}}}],"directives":[]}]}}]};
+export type SetFavoriteMutationFn = ApolloReactCommon.MutationFunction<SetFavoriteMutation, SetFavoriteMutationVariables>;
+
+    export function useSetFavoriteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetFavoriteMutation, SetFavoriteMutationVariables>) {
+      return ApolloReactHooks.useMutation<SetFavoriteMutation, SetFavoriteMutationVariables>(SetFavoriteDocument, baseOptions);
+    };
+export type SetFavoriteMutationHookResult = ReturnType<typeof useSetFavoriteMutation>;
+export type SetFavoriteMutationResult = ApolloReactCommon.MutationResult<SetFavoriteMutation>;
+export type SetFavoriteMutationOptions = ApolloReactCommon.BaseMutationOptions<SetFavoriteMutation, SetFavoriteMutationVariables>;

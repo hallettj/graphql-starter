@@ -1,5 +1,9 @@
 import * as React from "react"
-import { Episode, useGetHeroQuery } from "./generated/graphql"
+import {
+  Episode,
+  useGetHeroQuery,
+  useSetFavoriteMutation
+} from "./generated/graphql"
 
 export default function App() {
   const [episode, setEpisode] = React.useState<Episode>(Episode.Newhope)
@@ -15,8 +19,11 @@ export default function App() {
           <option value={Episode.Empire}>The Empire Strikes Back</option>
           <option value={Episode.Jedi}>Return of the Jedi</option>
         </select>
+        <SetFavorite episode={episode} />
       </div>
-      The hero of the episode is: <ShowHero episode={episode} />
+      <div>
+        The hero of the episode is: <ShowHero episode={episode} />
+      </div>
     </div>
   )
 }
@@ -45,5 +52,18 @@ function ShowHero({ episode }: { episode: Episode }) {
       <dt>Secret backstory</dt>
       <dd>{secretBackstory}</dd>
     </dl>
+  )
+}
+
+function SetFavorite({ episode }: { episode: Episode }) {
+  const [setFavorite, result] = useSetFavoriteMutation()
+  return (
+    <button
+      className="set-favorite"
+      disabled={result.loading}
+      onClick={() => setFavorite({ variables: { episode } })}
+    >
+      Set as favorite
+    </button>
   )
 }

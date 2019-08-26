@@ -9,3 +9,7 @@ query getHero($episode: Episode!) {
     secretBackstory
   }
 }
+
+mutation setFavorite($episode: Episode!) {
+  favorite(episode: $episode)
+}
