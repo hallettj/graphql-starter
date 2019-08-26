@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { GraphQLResolveInfo } from "graphql"
+import { Character, Droid, Human } from "../resolvers/types"
 export type Maybe<T> = T | null
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X]

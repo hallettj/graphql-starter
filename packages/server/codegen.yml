@@ -8,4 +8,7 @@ generates:
       - typescript
       - typescript-resolvers
     config:
-      mappers: []
+      mappers:
+        Character: ../resolvers/types#Character
+        Droid: ../resolvers/types#Droid
+        Human: ../resolvers/types#Human
