@@ -14,7 +14,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.css' '*.graphql' '*.ts' '*.tsx'"
+      "pre-commit": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.css' '*.graphql' '*.ts' '*.tsx' '!*/generated/*'"
     }
   },
   "devDependencies": {
