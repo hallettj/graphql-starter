@@ -47,7 +47,7 @@ same names.
 
 Each resolver method is called when responding to a query that requests the
 corresponding field. The method takes as arguments a "parent" value, and an
-object with variables given for the field in the query (if any). At the
+object with variables given for that field in the query (if any). At the
 top-level the parent value might not be meaningful. But notice the value that
 the `Query` resolver's `human` method returns - the same value will be given as
 the parent value when the `Human` resolver methods are called.
@@ -59,14 +59,15 @@ that is an array of `Character`s. But in the resolver implementation the
 `friends` property is actually an array of IDs. The `friends` method on the
 `Human` resolver does the translation from IDs to `Character`s. This allows the
 schema graph to be theoretically infinitely deep, or to include cycles.
-Resolvers lazily fill in values as requested
+Resolvers lazily expand field values as requested.
 
 A resolver might not implement a method for every field in the corresponding
 GraphQL type. If its parent value is a JavaScript object, and there is no method
-for a given field, Apollo will look for the field value in the JavaScript object
-instead. For example the `Human` GraphQL type has `id` and `name` fields, but
-there are no corresponding resolver methods. This is because the `human` method
-on the `Query` resolver returns an object that has properties with those values.
+for a given field, graphql will look for the field value in the JavaScript
+object instead. For example the `Human` GraphQL type has `id` and `name` fields,
+but there are no corresponding resolver methods. This is because the `human`
+method on the `Query` resolver returns an object that has properties with those
+values.
 
 Note that the `resolvers` object is annotated with the `Resolvers` type, which
 comes from generated code. This ensures that your API implementation is
@@ -77,8 +78,8 @@ type-compatible with the source of truth: the schema declared in
 
 You can see an example of a resolver test in `resolvers/index.test.ts`. The
 approach is to make actual GraphQL queries, and to make assertions on the
-response. The test calls the `graphql` function directly which does not require
-a network server.
+response. The test calls the `graphql` function directly which means that there
+is no need for a network server when running tests.
 
 ## code generation
 
@@ -112,10 +113,10 @@ a generated file with a line like this,
 
     import { Human } from '../resolvers/types';
 
-and that it should use that imported `Human` type as the parent value for
-the `Human` resolver. The imported type differs from the GraphQL type in that
-the imported type's `friends` property is an array of IDs instead of an array of
-`Character`s.
+and that it should use that imported `Human` type as the type for parent values
+for the `Human` resolver. The imported type differs from the GraphQL type in
+that the imported type's `friends` property is an array of IDs instead of an
+array of `Character`s.
 
 ### generated client code
 
