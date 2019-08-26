@@ -1,36 +1,20 @@
 {
   "name": "graphql-starter",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@types/jest": "24.0.17",
-    "@types/node": "12.7.2",
-    "@types/react": "16.9.1",
-    "@types/react-dom": "16.8.5",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
-    "typescript": "3.5.3"
+  "workspaces": [
+    "packages/*"
+  ],
+  "prettier": {
+    "semi": false
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "husky": {
+    "hooks": {
+      "pre-commit": "git-format-staged -f 'prettier --stdin --stdin-filepath \"{}\"' '*.css' '*.graphql' '*.ts' '*.tsx'"
+    }
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "git-format-staged": "^2.1.0",
+    "husky": "^3.0.4",
+    "prettier": "^1.18.2"
   }
 }
