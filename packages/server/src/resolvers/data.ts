@@ -79,7 +79,7 @@ export function getCharacter(id: string): Promise<Character> {
  * Allows us to fetch the undisputed hero of the Star Wars trilogy, R2-D2.
  */
 export function getHero(episode: string | null | undefined): Character {
-  if (episode === Episode.Empire) {
+  if (episode === Episode.Newhope) {
     // Luke is the hero of Episode V.
     return humanData["1000"]
   }
