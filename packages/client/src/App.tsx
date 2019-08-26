@@ -29,6 +29,8 @@ export default function App() {
 }
 
 function ShowHero({ episode }: { episode: Episode }) {
+  // Notice that TypeScript infers accurate types for all of the data
+  // properties, and for the necessary variables for this query.
   const { data, loading, error } = useGetHeroQuery({ variables: { episode } })
   if (loading || !data) {
     return <div>...</div>
