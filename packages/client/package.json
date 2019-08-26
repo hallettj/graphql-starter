@@ -1,6 +1,6 @@
 {
   "name": "@graphql-starter/client",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -25,24 +25,22 @@
     ]
   },
   "dependencies": {
-    "@types/jest": "24.0.17",
-    "@types/node": "12.7.2",
-    "@types/react": "16.9.1",
-    "@types/react-dom": "16.8.5",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
-    "typescript": "3.5.3"
+    "react-scripts": "3.1.1"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^1.5.0",
-    "@graphql-codegen/cli": "^1.5.0",
-    "@graphql-codegen/typescript": "^1.5.0",
-    "@graphql-codegen/typescript-operations": "^1.5.0",
-    "@graphql-codegen/typescript-react-apollo": "^1.5.0",
-    "@graphql-codegen/typescript-resolvers": "^1.5.0",
-    "@types/graphql": "^14.2.3"
+    "@graphql-codegen/add": "^1.6.1",
+    "@graphql-codegen/cli": "^1.6.1",
+    "@graphql-codegen/typescript": "^1.6.1",
+    "@graphql-codegen/typescript-operations": "^1.6.1",
+    "@graphql-codegen/typescript-react-apollo": "^1.6.1",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "24.0.17",
+    "@types/node": "12.7.2",
+    "@types/react": "16.9.1",
+    "@types/react-dom": "16.8.5"
   }
 }
