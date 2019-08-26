@@ -1,26 +1,49 @@
-import React from "react"
-import logo from "./logo.svg"
-import "./App.css"
+import * as React from "react"
+import { Episode, useGetHeroQuery } from "./generated/graphql"
 
-const App: React.FC = () => {
+export default function App() {
+  const [episode, setEpisode] = React.useState<Episode>(Episode.Newhope)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <div>
+        Select a Star Wars episode:
+        <select
+          value={episode}
+          onChange={event => setEpisode(event.target.value as Episode)}
         >
-          Learn React
-        </a>
-      </header>
+          <option value={Episode.Newhope}>A New Hope</option>
+          <option value={Episode.Empire}>The Empire Strikes Back</option>
+          <option value={Episode.Jedi}>Return of the Jedi</option>
+        </select>
+      </div>
+      The hero of the episode is: <ShowHero episode={episode} />
     </div>
   )
 }
 
-export default App
+function ShowHero({ episode }: { episode: Episode }) {
+  const { data, loading, error } = useGetHeroQuery({ variables: { episode } })
+  if (loading || !data) {
+    return <div>...</div>
+  }
+  if (error) {
+    return <div>Error: {error}</div>
+  }
+  const { name, friends, secretBackstory } = data.hero
+  return (
+    <dl>
+      <dt>Name</dt>
+      <dd>{name}</dd>
+
+      <dt>Friends</dt>
+      <dd>
+        {(friends || []).map(
+          friend => friend && <span key={friend.id}>{friend.name}</span>
+        )}
+      </dd>
+
+      <dt>Secret backstory</dt>
+      <dd>{secretBackstory}</dd>
+    </dl>
+  )
+}

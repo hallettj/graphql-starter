@@ -58,7 +58,7 @@ export type MutationFavoriteArgs = {
 
 export type Query = {
   __typename?: 'Query',
-  hero?: Maybe<Character>,
+  hero: Character,
   human?: Maybe<Human>,
   droid?: Maybe<Droid>,
 };
@@ -204,7 +204,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  hero?: Resolver<Maybe<ResolversTypes['Character']>, ParentType, ContextType, QueryHeroArgs>,
+  hero?: Resolver<ResolversTypes['Character'], ParentType, ContextType, QueryHeroArgs>,
   human?: Resolver<Maybe<ResolversTypes['Human']>, ParentType, ContextType, RequireFields<QueryHumanArgs, 'id'>>,
   droid?: Resolver<Maybe<ResolversTypes['Droid']>, ParentType, ContextType, RequireFields<QueryDroidArgs, 'id'>>,
 };

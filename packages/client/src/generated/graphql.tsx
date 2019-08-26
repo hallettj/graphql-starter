@@ -58,7 +58,7 @@ export type MutationFavoriteArgs = {
 
 export type Query = {
   __typename?: 'Query',
-  hero?: Maybe<Character>,
+  hero: Character,
   human?: Maybe<Human>,
   droid?: Maybe<Droid>,
 };
@@ -84,16 +84,30 @@ export type GetHeroQueryVariables = {
 
 export type GetHeroQuery = (
   { __typename?: 'Query' }
-  & { hero: Maybe<(
+  & { hero: (
     { __typename?: 'Human' }
-    & Pick<Human, 'id' | 'name'>
+    & Pick<Human, 'id' | 'name' | 'secretBackstory'>
+    & { friends: Maybe<Array<Maybe<(
+      { __typename?: 'Human' }
+      & Pick<Human, 'id' | 'name'>
+    ) | (
+      { __typename?: 'Droid' }
+      & Pick<Droid, 'id' | 'name'>
+    )>>> }
   ) | (
     { __typename?: 'Droid' }
-    & Pick<Droid, 'id' | 'name'>
-  )> }
+    & Pick<Droid, 'id' | 'name' | 'secretBackstory'>
+    & { friends: Maybe<Array<Maybe<(
+      { __typename?: 'Human' }
+      & Pick<Human, 'id' | 'name'>
+    ) | (
+      { __typename?: 'Droid' }
+      & Pick<Droid, 'id' | 'name'>
+    )>>> }
+  ) }
 );
 
-export const GetHeroDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getHero"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Episode"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hero"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"episode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episode"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}}]}}]};
+export const GetHeroDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getHero"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Episode"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hero"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"episode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episode"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"friends"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"secretBackstory"},"arguments":[],"directives":[]}]}}]}}]};
 
     export function useGetHeroQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetHeroQuery, GetHeroQueryVariables>) {
       return ApolloReactHooks.useQuery<GetHeroQuery, GetHeroQueryVariables>(GetHeroDocument, baseOptions);
