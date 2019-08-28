@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "start:client": "cross-env 'REACT_APP_API_URL=http://localhost:4000/' yarn workspace @graphql-starter/client start",
-    "start:server": "cross-env PORT=4000 yarn workspace @graphql-starter/server start"
+    "start:server": "cross-env PORT=4000 yarn workspace @graphql-starter/server start",
+    "test": "cross-env CI=true yarn workspaces run test"
   },
   "workspaces": [
     "packages/*"

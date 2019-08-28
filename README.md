@@ -8,8 +8,7 @@ _Make sure yarn is installed: https://yarnpkg.com/lang/en/docs/install_
 
 To run tests run:
 
-    $ yarn workspace @graphql-starter/client test
-    $ yarn workspace @graphql-starter/server test
+    $ yarn test
 
 To run the app (a browser window will open automatically):
 
