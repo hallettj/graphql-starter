@@ -4,7 +4,9 @@ This repo implements a minimal GraphQL app that provides end-to-end type safety
 using graphql-codegen. It demonstrates setting up server and client using
 Apollo, making queries from React components, and testing.
 
-_Make sure yarn is installed https://yarnpkg.com/lang/en/docs/install_
+_Ensure installation:_
+- _https://yarnpkg.com/lang/en/docs/install_
+- _https://jestjs.io/docs/en/getting-started_
 
 Before running tests or running the app install dependencies by running this
 command in the project directory:
