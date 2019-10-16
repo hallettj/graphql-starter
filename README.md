@@ -1,8 +1,12 @@
 # graphql-starter
 
 This repo implements a minimal GraphQL app that provides end-to-end type safety
-using graphql-codegen. It demonstrates setting up server and client using
-Apollo, making queries from React components, and testing.
+using [GraphQL Code Generator][]. It demonstrates setting up server and client
+using Apollo, making queries from React components, and testing.
+
+[GraphQL Code Generator]: https://graphql-code-generator.com/
+
+## Running the code
 
 _Make sure yarn is installed https://yarnpkg.com/lang/en/docs/install_
 
@@ -20,9 +24,101 @@ To run the app (a browser window will open automatically):
     $ yarn start:server # wait until the server is running
 	$ yarn start:client
 
-Some key points to note:
+## The high-level view
 
-## file: `schema.graphql`
+This kit combines several GraphQL-related libraries. If you are new to any of
+these it can be difficult to know which documentation to look at when you have
+an issue. Here is a breakdown that can hopefully point you in the right
+direction:
+
+*graphql* interprets `schema.graphql`, and executes resolvers. For most
+server-side GraphQL-related issues you will want to refer to the
+[graphql-js documentation](https://graphql.org/graphql-js/).
+There is also useful background on general GraphQL principles in the
+[graphql.org documentation](https://graphql.org/learn/).
+But keep in mind that the types that are applied to resolvers are provided by
+GraphQL Code Generator; so you may need to refer to that project's documentation
+for type-related issues.
+Refer to the graphql-js documentation for information on,
+
+- working with resolvers
+- testing resolvers
+- issues relating to `schema.ts`
+
+Refer to the graphql.org documentation for information on,
+
+- `schema.graphql`
+- `operations.graphql`
+- GraphQL best practices and general concepts
+
+*GraphQL Code Generator* also interprets `schema.graphql`, but does so at code
+generation time for the exclusive purpose of generating types for resolvers. In
+the client side it interprets both `schema.graphql` and `operations.graphql` and
+combines information from both to produce generated types for React hooks.
+GraphQL Code Generator comes with many plugins; on the server-side this project
+uses the plugins,
+
+- [TypeScript](https://graphql-code-generator.com/docs/plugins/typescript)
+- [TypeScript Resolvers](https://graphql-code-generator.com/docs/plugins/typescript-resolvers)
+
+On the React side we use the plugins,
+
+- [TypeScript](https://graphql-code-generator.com/docs/plugins/typescript)
+- [TypeScript Operations](https://graphql-code-generator.com/docs/plugins/typescript-operations)
+- [TypeScript React Apollo](https://graphql-code-generator.com/docs/plugins/typescript-react-apollo)
+
+Refer to the GraphQL Code Generator documentation for issues with
+
+- types
+- the `generated/graphql.ts` and `generated/graphql.tsx` files
+- how types in `schema.graphql` map to types in TypeScript code
+- understanding the configuration in the two `codegen.yml` files.
+
+For server-side work you will mainly want to look at the TypeScript Resolvers
+plugin documentation; on the client side the most relevant reference is the
+TypeScript React Apollo documentation.
+
+*Apollo Server* translates between HTTP requests and the graphql library. The
+graphql library exports a function called `graphql`, and essentially Apollo
+Server parses queries from HTTP requests, and calls that function, and builds
+HTTP responses with the results. Because Apollo Server calls `graphql` for you
+any server-side GraphQL configuration goes through Apollo Server. Refer to
+[Apollo Server documentation](https://www.apollographql.com/docs/apollo-server/)
+for information on
+
+- configuring the server
+- combining a GraphQL API with other HTTP endpoints
+- authentication
+
+*Apollo Client* provides React hooks that you use to invoke GraphQL queries and
+mutations. Used by itself those hooks take a query document, and options such as
+query variables, an option to skip a query under certain conditions, etc. In
+this project GraphQL Code Generator provides wrapped versions of the Apollo
+Client hooks via `generated/graphql.tsx` that pre-bind the query document based
+on documents in `operations.graphql`; so when you call the generated hooks you
+only need to provide variables and other options. Apollo Client also manages
+batching and combining GraphQL requests, caching responses, scheduling requests
+when request variables change or portions of the cache are invalidated. Refer
+to the
+[Apollo Client React documentation](https://www.apollographql.com/docs/react/)
+for information on,
+
+- what the hooks do, and how they work
+- options that you can pass to hooks
+- how to use the values returned from hooks
+- differences between query hooks, mutation hooks, and lazy query hooks
+- how to configure the Apollo provider component
+- testing React components
+- working with the Apollo Client cache
+
+For type-related issues on the React side you may need to refer to the
+[TypeScript React Apollo code generator documentation](https://graphql-code-generator.com/docs/plugins/typescript-react-apollo)
+instead.
+
+
+## Some key points to note:
+
+### file: `schema.graphql`
 
 The source of truth on *what* the GraphQL API can do is defined in
 `schema.graphql`. This repo uses a toy schema that provides information about
@@ -38,7 +134,7 @@ requests fields from the top-level type (either `Query` or `Mutation` depending
 on the type of operation), and may select nested fields from top-level field
 values, and so on.
 
-## folder: `resolvers/`
+### folder: `resolvers/`
 
 Resolvers are the implementation of your API. The determine *how* the API works.
 You can see the resolvers implemented in
@@ -80,7 +176,7 @@ comes from generated code. This ensures that your API implementation is
 type-compatible with the source of truth: the schema declared in
 `schema.graphql`.
 
-### testing resolvers
+#### testing resolvers
 
 You can see an example of a resolver test in `resolvers/index.test.ts`. The
 approach is to make actual GraphQL queries, and to make assertions on the
@@ -88,6 +184,7 @@ response. The test calls the `graphql` function directly which means that there
 is no need for a network server when running tests.
 
 ## implementation
+
 The setup in graphql-starter depends on using Apollo on the client side, but 
 could work just as well with a different implementation on the server side. 
 The generated server-side code is used by the graphql module, which is the 
