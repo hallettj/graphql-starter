@@ -9,6 +9,6 @@ generates:
       - typescript-resolvers
     config:
       mappers:
-        Character: ../resolvers/types#Character
-        Droid: ../resolvers/types#Droid
-        Human: ../resolvers/types#Human
+        Character: ../resolvers/types#Character as CharacterType
+        Droid: ../resolvers/types#Droid as DroidType
+        Human: ../resolvers/types#Human as HumanType

@@ -1,8 +1,9 @@
 /* eslint-disable */
 import { GraphQLResolveInfo } from 'graphql';
-import { Character, Droid, Human } from '../resolvers/types';
+import { Character as CharacterType, Droid as DroidType, Human as HumanType } from '../resolvers/types';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string,
@@ -12,71 +13,106 @@ export type Scalars = {
   Float: number,
 };
 
+/** A character in the Star Wars Trilogy */
 export type Character = {
+  /** The id of the character. */
   id: Scalars['ID'],
+  /** The name of the character. */
   name?: Maybe<Scalars['String']>,
+  /** The friends of the character, or an empty list if they have none. */
   friends?: Maybe<Array<Maybe<Character>>>,
+  /** Which movies they appear in. */
   appearsIn?: Maybe<Array<Maybe<Episode>>>,
+  /** All secrets about their past. */
   secretBackstory?: Maybe<Scalars['String']>,
 };
 
+/** A mechanical creature in the Star Wars universe. */
 export type Droid = Character & {
-  __typename?: 'Droid',
+   __typename?: 'Droid',
+  /** The id of the droid. */
   id: Scalars['ID'],
+  /** The name of the droid. */
   name?: Maybe<Scalars['String']>,
+  /** The friends of the droid, or an empty list if they have none. */
   friends?: Maybe<Array<Maybe<Character>>>,
+  /** Which movies they appear in. */
   appearsIn?: Maybe<Array<Maybe<Episode>>>,
+  /** Construction date and the name of the designer. */
   secretBackstory?: Maybe<Scalars['String']>,
+  /** The primary function of the droid. */
   primaryFunction?: Maybe<Scalars['String']>,
 };
 
+/** One of the films in the Star Wars Trilogy */
 export enum Episode {
+  /** Released in 1977. */
   Newhope = 'NEWHOPE',
+  /** Released in 1980. */
   Empire = 'EMPIRE',
+  /** Released in 1983. */
   Jedi = 'JEDI'
 }
 
+/** A humanoid creature in the Star Wars universe. */
 export type Human = Character & {
-  __typename?: 'Human',
+   __typename?: 'Human',
+  /** The id of the human. */
   id: Scalars['ID'],
+  /** The name of the human. */
   name?: Maybe<Scalars['String']>,
+  /** The friends of the human, or an empty list if they have none. */
   friends?: Maybe<Array<Maybe<Character>>>,
+  /** Which movies they appear in. */
   appearsIn?: Maybe<Array<Maybe<Episode>>>,
+  /** The home planet of the human, or null if unknown. */
   homePlanet?: Maybe<Scalars['String']>,
+  /** Where are they from and how they came to be who they are. */
   secretBackstory?: Maybe<Scalars['String']>,
 };
 
+/** Root Mutation */
 export type Mutation = {
-  __typename?: 'Mutation',
+   __typename?: 'Mutation',
+  /** Save the favorite episode. */
   favorite?: Maybe<Episode>,
 };
 
 
+/** Root Mutation */
 export type MutationFavoriteArgs = {
   episode: Episode
 };
 
+/** Root query */
 export type Query = {
-  __typename?: 'Query',
+   __typename?: 'Query',
+  /** Return the hero by episode. */
   hero: Character,
+  /** Return the Human by ID. */
   human?: Maybe<Human>,
+  /** Return the Droid by ID. */
   droid?: Maybe<Droid>,
 };
 
 
+/** Root query */
 export type QueryHeroArgs = {
   episode?: Maybe<Episode>
 };
 
 
+/** Root query */
 export type QueryHumanArgs = {
   id: Scalars['ID']
 };
 
 
+/** Root query */
 export type QueryDroidArgs = {
   id: Scalars['ID']
 };
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -150,11 +186,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Episode: Episode,
-  Character: ResolverTypeWrapper<Character>,
+  Character: ResolverTypeWrapper<CharacterType>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Human: ResolverTypeWrapper<Human>,
-  Droid: ResolverTypeWrapper<Droid>,
+  Human: ResolverTypeWrapper<HumanType>,
+  Droid: ResolverTypeWrapper<DroidType>,
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 };
@@ -163,11 +199,11 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {},
   Episode: Episode,
-  Character: Character,
+  Character: CharacterType,
   ID: Scalars['ID'],
   String: Scalars['String'],
-  Human: Human,
-  Droid: Droid,
+  Human: HumanType,
+  Droid: DroidType,
   Mutation: {},
   Boolean: Scalars['Boolean'],
 };
