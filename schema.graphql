@@ -12,20 +12,41 @@ enum Genre {
 interface Publication {
   id: ID!
   title: String!
-
   """
   A publication has at least one, but possibly more, authors.
   """
   author: [String!]!
   publicationDate: Date!
-  readBy: [User!]!
+  reviews: [Review!]!
 }
 
 type Article implements Publication {
-  periodical: Publication!
+  # Publication fields
+  id: ID!
+  title: String!
+  """
+  A publication has at least one, but possibly more, authors.
+  """
+  author: [String!]!
+  publicationDate: Date!
+
+  # Article-specific fields
+  reviews: [Review!]!
+  periodical: Periodical!
 }
 
 type Book implements Publication {
+  # Publication fields
+  id: ID!
+  title: String!
+  """
+  A publication has at least one, but possibly more, authors.
+  """
+  author: [String!]!
+  publicationDate: Date!
+  reviews: [Review!]!
+
+  # Book-specific fields
   isbn: String!
   genre: Genre
 }
@@ -44,7 +65,15 @@ type Periodical {
 type User {
   id: ID!
   name: String!
-  hasRead: [Publication!]!
+  reviews: [Review!]!
+}
+
+type Review {
+  id: ID!
+  user: User!
+  publication: Publication!
+  score: Int!
+  text: String
 }
 
 # Input types
@@ -64,19 +93,31 @@ input ArticleInput {
   periodicalID: ID!
 }
 
+input ReviewInput {
+  publicationID: ID!
+  userID: ID!
+  score: Int!
+  text: String
+}
+
 # Root types
 
 type Mutation {
-  addArticle(article: ArticleInput): Article!
-  addBook(publication: BookInput): Book!
+  addArticle(article: ArticleInput!): Article!
+  addBook(book: BookInput!): Book!
   addPeriodical(title: String!, editor: [String!]!): Periodical!
   addUser(name: String!): User!
-  markRead(publicationID: ID!, userID: ID!): Boolean!
+  addReview(review: ReviewInput!): Review!
 }
 
 type Query {
   periodicals: [Periodical!]!
-  publications(after: Date, before: Date, genre: Genre): [Publication!]!
+  publications(
+    after: Date
+    before: Date
+    genre: Genre
+    limit: Int
+  ): [Publication!]!
   users: [User!]!
 
   periodical(id: ID!): Periodical

@@ -9,6 +9,11 @@ generates:
       - typescript-resolvers
     config:
       mappers:
-        Character: ../resolvers/types#Character as CharacterType
-        Droid: ../resolvers/types#Droid as DroidType
-        Human: ../resolvers/types#Human as HumanType
+        Article: ../database#Article as ArticleType
+        Book: ../database#Book as BookType
+        Periodical: ../database#Periodical as PeriodicalType
+        Publication: ../database#Publication as PublicationType
+        Review: ../database#Review as ReviewType
+        User: ../database#User as UserType
+      scalars:
+        Date: Date

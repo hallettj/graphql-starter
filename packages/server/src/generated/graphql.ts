@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { Character as CharacterType, Droid as DroidType, Human as HumanType } from '../resolvers/types';
+import { Article as ArticleType, Book as BookType, Periodical as PeriodicalType, Publication as PublicationType, Review as ReviewType, User as UserType } from '../database';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 
@@ -11,12 +11,20 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  Date: any,
+  Date: Date,
 };
 
 export type Article = Publication & {
    __typename?: 'Article',
-  periodical: Publication,
+  /** Publication fields */
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  /** A publication has at least one, but possibly more, authors. */
+  author: Array<Scalars['String']>,
+  publicationDate: Scalars['Date'],
+  /** Article-specific fields */
+  reviews: Array<Review>,
+  periodical: Periodical,
 };
 
 export type ArticleInput = {
@@ -28,6 +36,14 @@ export type ArticleInput = {
 
 export type Book = Publication & {
    __typename?: 'Book',
+  /** Publication fields */
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  /** A publication has at least one, but possibly more, authors. */
+  author: Array<Scalars['String']>,
+  publicationDate: Scalars['Date'],
+  reviews: Array<Review>,
+  /** Book-specific fields */
   isbn: Scalars['String'],
   genre?: Maybe<Genre>,
 };
@@ -54,17 +70,17 @@ export type Mutation = {
   addBook: Book,
   addPeriodical: Periodical,
   addUser: User,
-  markRead: Scalars['Boolean'],
+  addReview: Review,
 };
 
 
 export type MutationAddArticleArgs = {
-  article?: Maybe<ArticleInput>
+  article: ArticleInput
 };
 
 
 export type MutationAddBookArgs = {
-  publication?: Maybe<BookInput>
+  book: BookInput
 };
 
 
@@ -79,9 +95,8 @@ export type MutationAddUserArgs = {
 };
 
 
-export type MutationMarkReadArgs = {
-  publicationID: Scalars['ID'],
-  userID: Scalars['ID']
+export type MutationAddReviewArgs = {
+  review: ReviewInput
 };
 
 export type Periodical = {
@@ -99,7 +114,7 @@ export type Publication = {
   /** A publication has at least one, but possibly more, authors. */
   author: Array<Scalars['String']>,
   publicationDate: Scalars['Date'],
-  readBy: Array<User>,
+  reviews: Array<Review>,
 };
 
 export type Query = {
@@ -116,7 +131,8 @@ export type Query = {
 export type QueryPublicationsArgs = {
   after?: Maybe<Scalars['Date']>,
   before?: Maybe<Scalars['Date']>,
-  genre?: Maybe<Genre>
+  genre?: Maybe<Genre>,
+  limit?: Maybe<Scalars['Int']>
 };
 
 
@@ -134,11 +150,27 @@ export type QueryUserArgs = {
   id: Scalars['ID']
 };
 
+export type Review = {
+   __typename?: 'Review',
+  id: Scalars['ID'],
+  user: User,
+  publication: Publication,
+  score: Scalars['Int'],
+  text?: Maybe<Scalars['String']>,
+};
+
+export type ReviewInput = {
+  publicationID: Scalars['ID'],
+  userID: Scalars['ID'],
+  score: Scalars['Int'],
+  text?: Maybe<Scalars['String']>,
+};
+
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
   name: Scalars['String'],
-  hasRead: Array<Publication>,
+  reviews: Array<Review>,
 };
 
 
@@ -213,44 +245,60 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  Periodical: ResolverTypeWrapper<Periodical>,
+  Periodical: ResolverTypeWrapper<PeriodicalType>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Article: ResolverTypeWrapper<Article>,
-  Publication: ResolverTypeWrapper<Publication>,
+  Article: ResolverTypeWrapper<ArticleType>,
+  Publication: ResolverTypeWrapper<PublicationType>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  User: ResolverTypeWrapper<User>,
+  Review: ResolverTypeWrapper<ReviewType>,
+  User: ResolverTypeWrapper<UserType>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   Genre: Genre,
   Mutation: ResolverTypeWrapper<{}>,
   ArticleInput: ArticleInput,
   BookInput: BookInput,
-  Book: ResolverTypeWrapper<Book>,
+  Book: ResolverTypeWrapper<BookType>,
+  ReviewInput: ReviewInput,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  Periodical: Periodical,
+  Periodical: PeriodicalType,
   ID: Scalars['ID'],
   String: Scalars['String'],
-  Article: Article,
-  Publication: Publication,
+  Article: ArticleType,
+  Publication: PublicationType,
   Date: Scalars['Date'],
-  User: User,
+  Review: ReviewType,
+  User: UserType,
+  Int: Scalars['Int'],
   Genre: Genre,
   Mutation: {},
   ArticleInput: ArticleInput,
   BookInput: BookInput,
-  Book: Book,
+  Book: BookType,
+  ReviewInput: ReviewInput,
   Boolean: Scalars['Boolean'],
 };
 
 export type ArticleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Article'] = ResolversParentTypes['Article']> = {
-  periodical?: Resolver<ResolversTypes['Publication'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
+  periodical?: Resolver<ResolversTypes['Periodical'], ParentType, ContextType>,
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
   isbn?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   genre?: Resolver<Maybe<ResolversTypes['Genre']>, ParentType, ContextType>,
 };
@@ -260,11 +308,11 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addArticle?: Resolver<ResolversTypes['Article'], ParentType, ContextType, MutationAddArticleArgs>,
-  addBook?: Resolver<ResolversTypes['Book'], ParentType, ContextType, MutationAddBookArgs>,
+  addArticle?: Resolver<ResolversTypes['Article'], ParentType, ContextType, RequireFields<MutationAddArticleArgs, 'article'>>,
+  addBook?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookArgs, 'book'>>,
   addPeriodical?: Resolver<ResolversTypes['Periodical'], ParentType, ContextType, RequireFields<MutationAddPeriodicalArgs, 'title' | 'editor'>>,
   addUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddUserArgs, 'name'>>,
-  markRead?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMarkReadArgs, 'publicationID' | 'userID'>>,
+  addReview?: Resolver<ResolversTypes['Review'], ParentType, ContextType, RequireFields<MutationAddReviewArgs, 'review'>>,
 };
 
 export type PeriodicalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Periodical'] = ResolversParentTypes['Periodical']> = {
@@ -280,7 +328,7 @@ export type PublicationResolvers<ContextType = any, ParentType extends Resolvers
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
-  readBy?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
+  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -292,10 +340,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
 };
 
+export type ReviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['Review'] = ResolversParentTypes['Review']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  publication?: Resolver<ResolversTypes['Publication'], ParentType, ContextType>,
+  score?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  hasRead?: Resolver<Array<ResolversTypes['Publication']>, ParentType, ContextType>,
+  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
 };
 
 export type Resolvers<ContextType = any> = {
@@ -306,6 +362,7 @@ export type Resolvers<ContextType = any> = {
   Periodical?: PeriodicalResolvers<ContextType>,
   Publication?: PublicationResolvers,
   Query?: QueryResolvers<ContextType>,
+  Review?: ReviewResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
 };
 

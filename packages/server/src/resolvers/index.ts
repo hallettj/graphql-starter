@@ -1,40 +1,55 @@
-/**
- * The resolvers here are examples adapted from Apollo's Star Wars example
- * server. The data served by the API is hard-coded - normally data would be
- * provided by a database.
- */
-
+import { GraphQLDate } from "graphql-iso-date"
 import { Resolvers } from "../generated/graphql"
-import { getDroid, getFriends, getHero, getHuman } from "./data"
+import * as database from "../database"
 
 const resolvers: Resolvers = {
   Query: {
-    hero: (_root, { episode }) => getHero(episode),
-    human: (_root, { id }) => getHuman(id),
-    droid: (_root, { id }) => getDroid(id)
+    periodicals: () => database.allPeriodicals(),
+    publications: (_root, { after, before, genre, limit }) =>
+      database.allPublications({ after, before, genre, limit }),
+    users: () => database.allUsers(),
+
+    periodical: (_root, { id }) => database.getPeriodical(id),
+    publication: (_root, { id }) => database.getPublication(id),
+    user: (_root, { id }) => database.getUser(id)
   },
   Mutation: {
-    favorite: (_root, { episode }) => episode
+    addArticle: (_root, { article }) => database.addArticle(article),
+    addBook: (_root, { book }) => database.addBook(book),
+    addPeriodical: (_root, { title, editor }) =>
+      database.addPeriodical({ title, editor }),
+    addUser: (_root, { name }) => database.addUser({ name }),
+    addReview: (_root, { review }) => database.addReview(review)
   },
-  Character: {
-    __resolveType(data, _context, info) {
-      if (getHuman(data.id)) {
-        return info.schema.getType("Human") as any
+  Publication: {
+    __resolveType(publication, _context, info) {
+      if (database.isArticle(publication)) {
+        return info.schema.getType("Article") as any
       }
-      if (getDroid(data.id)) {
-        return info.schema.getType("Droid") as any
+      if (database.isBook(publication)) {
+        return info.schema.getType("Book") as any
       }
       return null
     }
   },
-  Human: {
-    friends: character => getFriends(character),
-    appearsIn: ({ appearsIn }) => appearsIn
+  Article: {
+    periodical: article => database.getPeriodical(article.periodicalID),
+    reviews: article => database.getReviewsFor(article)
   },
-  Droid: {
-    friends: character => getFriends(character),
-    appearsIn: ({ appearsIn }) => appearsIn
-  }
+  Book: {
+    reviews: book => database.getReviewsFor(book)
+  },
+  Periodical: {
+    articles: periodical => database.getArticlesByPeriodical(periodical)
+  },
+  User: {
+    reviews: user => database.getReviewsBy(user)
+  },
+  Review: {
+    publication: review => database.getPublication(review.publicationID),
+    user: review => database.getUser(review.userID)
+  },
+  Date: GraphQLDate
 }
 
 export default resolvers
