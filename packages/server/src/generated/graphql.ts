@@ -21,9 +21,10 @@ export type Article = Publication & {
   title: Scalars['String'],
   /** A publication has at least one, but possibly more, authors. */
   author: Array<Scalars['String']>,
+  averageReviewScore?: Maybe<Scalars['Float']>,
   publicationDate: Scalars['Date'],
-  /** Article-specific fields */
   reviews: Array<Review>,
+  /** Article-specific fields */
   periodical: Periodical,
 };
 
@@ -41,6 +42,7 @@ export type Book = Publication & {
   title: Scalars['String'],
   /** A publication has at least one, but possibly more, authors. */
   author: Array<Scalars['String']>,
+  averageReviewScore?: Maybe<Scalars['Float']>,
   publicationDate: Scalars['Date'],
   reviews: Array<Review>,
   /** Book-specific fields */
@@ -113,6 +115,7 @@ export type Publication = {
   title: Scalars['String'],
   /** A publication has at least one, but possibly more, authors. */
   author: Array<Scalars['String']>,
+  averageReviewScore?: Maybe<Scalars['Float']>,
   publicationDate: Scalars['Date'],
   reviews: Array<Review>,
 };
@@ -250,6 +253,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   Article: ResolverTypeWrapper<ArticleType>,
   Publication: ResolverTypeWrapper<PublicationType>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Review: ResolverTypeWrapper<ReviewType>,
   User: ResolverTypeWrapper<UserType>,
@@ -271,6 +275,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'],
   Article: ArticleType,
   Publication: PublicationType,
+  Float: Scalars['Float'],
   Date: Scalars['Date'],
   Review: ReviewType,
   User: UserType,
@@ -288,6 +293,7 @@ export type ArticleResolvers<ContextType = any, ParentType extends ResolversPare
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  averageReviewScore?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
   periodical?: Resolver<ResolversTypes['Periodical'], ParentType, ContextType>,
@@ -297,6 +303,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  averageReviewScore?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
   isbn?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -327,6 +334,7 @@ export type PublicationResolvers<ContextType = any, ParentType extends Resolvers
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   author?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  averageReviewScore?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   publicationDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
 };

@@ -179,6 +179,15 @@ export const getReviewsFor = (pub: Publication): Review[] =>
 export const getReviewsBy = (user: User): Review[] =>
   reviews.filter(r => r.userID === user.id)
 
+export const getAverageReviewScore = (pub: Publication): number | null => {
+  const reviews = getReviewsFor(pub)
+  if (reviews.length === 0) {
+    return null
+  }
+  const sum = reviews.reduce((s, { score }) => s + score, 0)
+  return sum / reviews.length
+}
+
 // mutations
 
 export const addArticle = (input: {

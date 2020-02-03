@@ -33,10 +33,12 @@ const resolvers: Resolvers = {
     }
   },
   Article: {
+    averageReviewScore: article => database.getAverageReviewScore(article),
     periodical: article => database.getPeriodical(article.periodicalID),
     reviews: article => database.getReviewsFor(article)
   },
   Book: {
+    averageReviewScore: book => database.getAverageReviewScore(book),
     reviews: book => database.getReviewsFor(book)
   },
   Periodical: {

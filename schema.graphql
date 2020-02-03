@@ -16,6 +16,7 @@ interface Publication {
   A publication has at least one, but possibly more, authors.
   """
   author: [String!]!
+  averageReviewScore: Float
   publicationDate: Date!
   reviews: [Review!]!
 }
@@ -28,10 +29,11 @@ type Article implements Publication {
   A publication has at least one, but possibly more, authors.
   """
   author: [String!]!
+  averageReviewScore: Float
   publicationDate: Date!
+  reviews: [Review!]!
 
   # Article-specific fields
-  reviews: [Review!]!
   periodical: Periodical!
 }
 
@@ -43,6 +45,7 @@ type Book implements Publication {
   A publication has at least one, but possibly more, authors.
   """
   author: [String!]!
+  averageReviewScore: Float
   publicationDate: Date!
   reviews: [Review!]!
 
